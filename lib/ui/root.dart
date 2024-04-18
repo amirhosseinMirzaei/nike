@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nike/data/rep/auth_repository.dart';
+import 'package:nike/data/rep/cart_repository.dart';
 import 'package:nike/ui/Home/home.dart';
 import 'package:nike/ui/cart/cart.dart';
 import 'package:nike/ui/widgets/badge.dart';
@@ -68,6 +69,7 @@ class _RootScreenState extends State<RootScreen> {
                       ElevatedButton(
                           onPressed: () {
                             authRepository.signOut();
+                            CartRepository.cartItemCartNotifier.value = 0;
                           },
                           child: Text('خروج'))
                     ],
@@ -83,7 +85,16 @@ class _RootScreenState extends State<RootScreen> {
                     clipBehavior: Clip.none,
                     children: [
                       Icon(CupertinoIcons.cart),
-                      Positioned(right: -10, child: CustomBadge(value: 3))
+                      Positioned(
+                        right: -10,
+                        child: ValueListenableBuilder<int>(
+                          valueListenable: CartRepository.cartItemCartNotifier,
+                          builder:
+                              (BuildContext context, int value, Widget? child) {
+                            return CustomBadge(value: value);
+                          },
+                        ),
+                      )
                     ],
                   ),
                   label: 'سبدخرید'),
@@ -111,5 +122,11 @@ class _RootScreenState extends State<RootScreen> {
             onGenerateRoute: (settings) => MaterialPageRoute(
                 builder: (context) => Offstage(
                     offstage: selectedScreenIndex != index, child: child)));
+  }
+
+  @override
+  void initState() {
+    cartRepository.count();
+    super.initState();
   }
 }

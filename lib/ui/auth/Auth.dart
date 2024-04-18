@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike/data/rep/auth_repository.dart';
+import 'package:nike/data/rep/cart_repository.dart';
 import 'package:nike/ui/auth/bloc/auth_bloc.dart';
-
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -14,9 +14,9 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController usernameController =
-  TextEditingController(text: "test@gmail.com");
+      TextEditingController(text: "test@gmail.com");
   final TextEditingController passwordController =
-  TextEditingController(text: "123456");
+      TextEditingController(text: "123456");
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 backgroundColor: themeData.colorScheme.primary,
                 contentTextStyle: const TextStyle(fontFamily: 'IranYekan')),
             colorScheme:
-            themeData.colorScheme.copyWith(onSurface: onBackground),
+                themeData.colorScheme.copyWith(onSurface: onBackground),
             inputDecorationTheme: InputDecorationTheme(
                 labelStyle: const TextStyle(
                   color: onBackground,
@@ -49,12 +49,13 @@ class _AuthScreenState extends State<AuthScreen> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
-                    const BorderSide(color: Colors.white, width: 1)))),
+                        const BorderSide(color: Colors.white, width: 1)))),
         child: Scaffold(
           backgroundColor: themeData.colorScheme.secondary,
           body: BlocProvider<AuthBloc>(
             create: (context) {
-              final bloc = AuthBloc(authRepository);
+              final bloc =
+                  AuthBloc(authRepository, cartRepository: cartRepository);
               bloc.stream.forEach((state) {
                 if (state is AuthSuccess) {
                   Navigator.of(context).pop();
@@ -88,9 +89,9 @@ class _AuthScreenState extends State<AuthScreen> {
                         height: 24,
                       ),
                       Text(
-                        state.isLoginMode? 'خوش آمدید' : 'ثبت نام',
+                        state.isLoginMode ? 'خوش آمدید' : 'ثبت نام',
                         style:
-                        const TextStyle(color: onBackground, fontSize: 22),
+                            const TextStyle(color: onBackground, fontSize: 22),
                       ),
                       const SizedBox(
                         height: 16,
@@ -100,7 +101,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ? 'لطفا وارد حساب کاربری خود شوید'
                             : 'ایمیل و رمز عبور خود را تعیین کنید',
                         style:
-                        const TextStyle(color: onBackground, fontSize: 16),
+                            const TextStyle(color: onBackground, fontSize: 16),
                       ),
                       const SizedBox(
                         height: 24,
