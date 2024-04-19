@@ -20,11 +20,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        dividerColor: LightThemeColor.secondaryTextColor,
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
             foregroundColor: LightThemeColor.primaryTextColor,
             elevation: 0),
-
+        hintColor: LightThemeColor.secondaryTextColor,
+        inputDecorationTheme: InputDecorationTheme(
+            border: const OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: LightThemeColor.primaryTextColor.withOpacity(0.1)))),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the

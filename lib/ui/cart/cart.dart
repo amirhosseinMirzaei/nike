@@ -9,11 +9,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nike/data/rep/auth_repository.dart';
 
 import 'package:nike/data/rep/cart_repository.dart';
+import 'package:nike/theme.dart';
 import 'package:nike/ui/auth/Auth.dart';
 
 import 'package:nike/ui/cart/bloc/cart_bloc.dart';
 import 'package:nike/ui/cart/cart_item.dart';
 import 'package:nike/ui/cart/price_info.dart';
+import 'package:nike/ui/shipping/shipping.dart';
 import 'package:nike/ui/widgets/empty_state.dart';
 
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -27,6 +29,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   CartBloc? cartBloc;
+  bool stateIsSuccess = false;
   final RefreshController _refreshController = RefreshController();
   StreamSubscription? satateStreamSubscription;
   @override
@@ -58,10 +61,36 @@ class _CartScreenState extends State<CartScreen> {
           centerTitle: true,
           title: Text("سبد خرید"),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Visibility(
+          visible: stateIsSuccess,
+          child: Container(
+            margin: const EdgeInsets.only(left: 48, right: 48),
+            width: MediaQuery.of(context).size.width,
+            child: FloatingActionButton.extended(
+                backgroundColor: LightThemeColor.secondaryColor,
+                onPressed: () {
+                  final state = cartBloc!.state;
+                  if (state is CartSuccess) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ShippingScreen(
+                              payablePrice: state.cartResponse.payablePrice,
+                              shippingCost: state.cartResponse.shippingCost,
+                              totalPrice: state.cartResponse.totalPrice,
+                            )));
+                  }
+                },
+                label: const Text('پرداخت ')),
+          ),
+        ),
         body: BlocProvider<CartBloc>(
           create: (context) {
             final bloc = CartBloc(cartRepository);
             satateStreamSubscription = bloc.stream.listen((state) {
+              setState(() {
+                stateIsSuccess = state is CartSuccess;
+              });
+
               if (_refreshController.isRefresh) {
                 if (state is CartSuccess) {
                   _refreshController.refreshCompleted();
@@ -106,6 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                   },
                   controller: _refreshController,
                   child: ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 65),
                     itemBuilder: (context, index) {
                       if (index < state.cartResponse.cartItems.length) {
                         final data = state.cartResponse.cartItems[index];
