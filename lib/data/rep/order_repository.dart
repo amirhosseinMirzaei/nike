@@ -1,5 +1,6 @@
 import 'package:nike/data/common/http_client.dart';
 import 'package:nike/data/order.dart';
+import 'package:nike/data/payment_receipt.dart';
 import 'package:nike/data/source/order_data_source.dart';
 
 final orderRepository =
@@ -14,4 +15,8 @@ class OrderRepository implements IOrderRepository {
   @override
   Future<CreateOrderResult> create(CreateOrderParams params) =>
       dataSource.create(params);
+
+  @override
+  Future<PaymentReceiptData> getPaymentReceipt(int orderId) =>
+      dataSource.getPaymentReceipt(orderId);
 }
