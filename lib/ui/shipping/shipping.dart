@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike/data/order.dart';
 import 'package:nike/data/rep/order_repository.dart';
 import 'package:nike/ui/cart/price_info.dart';
+import 'package:nike/ui/payment_webview.dart';
 import 'package:nike/ui/receipt/payment_receipt.dart';
 import 'package:nike/ui/shipping/bloc/shipping_bloc.dart';
 
@@ -62,9 +63,19 @@ class _ShippingScreenState extends State<ShippingScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.exception.message)));
             } else if (state is ShippingSuccess) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      PaymentReceiptScreen(orderId: state.result.orderId)));
+              if (state.result.bankGatewayUrl.isNotEmpty) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentGatewayScreen(
+                        bankGatewayUrl: state.result.bankGatewayUrl),
+                  ),
+                );
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        PaymentReceiptScreen(orderId: state.result.orderId)));
+              }
             }
           });
           return bloc;
@@ -177,7 +188,19 @@ class _ShippingScreenState extends State<ShippingScreen> {
                               width: 16,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<ShippingBloc>(context).add(
+                                  ShippingCreateOrder(
+                                    params: CreateOrderParams(
+                                        firstName: firstNameController.text,
+                                        lastName: lastNameController.text,
+                                        phoneNumber: phoneNumberController.text,
+                                        postalCode: postalCodeController.text,
+                                        address: addressController.text,
+                                        paymentMethod: PaymentMethod.online),
+                                  ),
+                                );
+                              },
                               child: const Text('پرداخت اینترنتی'),
                             ),
                           ],
