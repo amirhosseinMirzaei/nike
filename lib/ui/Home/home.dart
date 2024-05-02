@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike/common/utils.dart';
@@ -8,6 +6,7 @@ import 'package:nike/data/product.dart';
 import 'package:nike/data/rep/banner_repository.dart';
 import 'package:nike/data/rep/product_repository.dart';
 import 'package:nike/ui/Home/bloc/home_bloc.dart';
+import 'package:nike/ui/list/list.dart';
 import 'package:nike/ui/product/product.dart';
 import 'package:nike/ui/widgets/errors.dart';
 import 'package:nike/ui/widgets/sliders.dart';
@@ -51,13 +50,24 @@ class HomeScreen extends StatelessWidget {
                       case 3:
                         return _HorizontalProductList(
                           title: 'جدیدترین',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const ProductListScreen(
+                                    sort: ProductSort.latest)));
+                          },
                           products: state.latestProducts,
                         );
                       case 4:
                         return _HorizontalProductList(
                           title: 'پربازدیدترین',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const ProductListScreen(
+                                    sort: ProductSort.popular),
+                              ),
+                            );
+                          },
                           products: state.popularProducts,
                         );
                       default:

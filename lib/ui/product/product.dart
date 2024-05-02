@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:nike/common/utils.dart';
 import 'package:nike/data/product.dart';
 import 'package:nike/ui/product/details.dart';
 import 'package:nike/ui/widgets/image.dart';
-
 
 class ProductItem extends StatelessWidget {
   const ProductItem({
     super.key,
     required this.product,
     required this.borderRadius,
+    this.itemWidth = 176,
+    this.itemHeight = 189,
   });
 
   final ProductEntity product;
   final BorderRadius borderRadius;
+  final double itemWidth;
+  final double itemHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +31,14 @@ class ProductItem extends StatelessWidget {
                     product: product,
                   ))),
           child: SizedBox(
-            width: 176,
+            width: itemWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Stack(
                   children: [
-                    SizedBox(
-                      width: 176,
-                      height: 189,
+                    AspectRatio(
+                      aspectRatio: 0.93,
                       child: ImageLoadingService(
                         imageUrl: product.imageUrl,
                         borderRadius: BorderRadius.circular(12),
