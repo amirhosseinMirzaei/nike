@@ -101,8 +101,9 @@ class CartItem extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(
+          Divider(
             height: 1,
+            color: Colors.black.withOpacity(0.2),
           ),
           data.deleteButtonLoading
               ? const SizedBox(

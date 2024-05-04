@@ -16,8 +16,11 @@ class ProductListScreen extends StatefulWidget {
   State<ProductListScreen> createState() => _ProductListScreenState();
 }
 
+enum ViewType { grid, list }
+
 class _ProductListScreenState extends State<ProductListScreen> {
   ProductListBloc? bloc;
+  ViewType viewType = ViewType.grid;
   @override
   void dispose() {
     bloc?.close();
@@ -61,7 +64,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     child: InkWell(
                       onTap: () {
                         showModalBottomSheet(
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(32))),
                             context: context,
@@ -165,7 +168,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           Padding(
                             padding: const EdgeInsets.only(right: 8, left: 8),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  viewType = viewType == ViewType.grid
+                                      ? ViewType.list
+                                      : ViewType.grid;
+                                });
+                              },
                               icon: const Icon(CupertinoIcons.square_grid_2x2),
                             ),
                           ),
@@ -177,7 +186,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     child: GridView.builder(
                       itemCount: products.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.65, crossAxisCount: 2),
+                          childAspectRatio: 0.65,
+                          crossAxisCount: viewType == ViewType.grid ? 2 : 1),
                       itemBuilder: (BuildContext context, int index) {
                         final product = products[index];
                         return ProductItem(

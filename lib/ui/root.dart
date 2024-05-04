@@ -5,6 +5,7 @@ import 'package:nike/data/rep/auth_repository.dart';
 import 'package:nike/data/rep/cart_repository.dart';
 import 'package:nike/ui/Home/home.dart';
 import 'package:nike/ui/cart/cart.dart';
+import 'package:nike/ui/profile/profile_screen.dart';
 import 'package:nike/ui/widgets/badge.dart';
 
 const int homeIndex = 0;
@@ -60,20 +61,10 @@ class _RootScreenState extends State<RootScreen> {
                 const CartScreen(),
               ),
               _navigator(
-                  _profileKey,
-                  profileIndex,
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('profile'),
-                      ElevatedButton(
-                          onPressed: () {
-                            authRepository.signOut();
-                            CartRepository.cartItemCartNotifier.value = 0;
-                          },
-                          child: Text('خروج'))
-                    ],
-                  )),
+                _profileKey,
+                profileIndex,
+                ProfileScreen(),
+              )
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(

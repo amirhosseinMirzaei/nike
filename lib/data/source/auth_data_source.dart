@@ -3,7 +3,6 @@ import 'package:nike/data/auth_info.dart';
 import 'package:nike/data/common/constant.dart';
 import 'package:nike/data/common/response_validator.dart';
 
-
 abstract class IAuthDataSource {
   Future<AuthInfo> login(String username, String password);
   Future<AuthInfo> signUp(String username, String password);
@@ -28,8 +27,8 @@ class AuthRemoteDataSource
 
     validateResponse(response);
 
-    return AuthInfo(
-        response.data["access_token"], response.data["refresh_token"]);
+    return AuthInfo(response.data["access_token"],
+        response.data["refresh_token"], username);
   }
 
   @override
@@ -44,7 +43,7 @@ class AuthRemoteDataSource
     validateResponse(response);
 
     return AuthInfo(
-        response.data["access_token"], response.data["refresh_token"]);
+        response.data["access_token"], response.data["refresh_token"], '');
   }
 
   @override

@@ -58,8 +58,9 @@ class PriceInfo extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(
+              Divider(
                 height: 1,
+                color: Colors.black.withOpacity(0.1),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 16, 12, 16),
@@ -71,8 +72,9 @@ class PriceInfo extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(
+              Divider(
                 height: 1,
+                color: Colors.black.withOpacity(0.1),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 12, 12, 6),
